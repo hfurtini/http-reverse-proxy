@@ -21,6 +21,15 @@ func createRequest(website string) (sb string){
     return string(body)
 }
 
+func status(website string) (path string, status int){
+    resp, err := http.Get(website)
+	if err != nil{
+		log.Fatalln(err)
+	}
+
+    return resp.Request.URL.Path ,resp.StatusCode
+}
+
 func main() {
 
     http.HandleFunc("/server2", func(w http.ResponseWriter, r *http.Request) {
@@ -48,6 +57,9 @@ func main() {
             fmt.Fprintln(w, createRequest("https://archlinux.org/"))
         }
 
+        path, status := status("https://archlinux.org/")
+        fmt.Fprintf(w, "[%s] [%s] - Status: [%d]", r.Method, path, status)
+
     })
     http.HandleFunc("/server1", func(w http.ResponseWriter, r *http.Request) {
 
@@ -62,7 +74,7 @@ func main() {
 
         //Display the status
         fmt.Fprintln(w, http.StatusOK)
-        
+
         header := r.Header.Get("X-Block-Me")
         if header == ""{
             fmt.Fprintln(w, "Proxy is ready")
@@ -74,6 +86,9 @@ func main() {
             fmt.Fprintln(w, "Proxy is ready")
             fmt.Fprintln(w, createRequest("https://httpbin.org/"))
         }
+
+        path, status := status("https://httpbin.org/")
+        fmt.Fprintf(w, "[%s] [%s] - Status: [%d]", r.Method, path, status)
     }) 
 
     port := ":5555"
