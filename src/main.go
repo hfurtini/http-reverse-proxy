@@ -8,7 +8,7 @@ import (
 
 func main() {
 
-    http.HandleFunc("/server2", func(w http.ResponseWriter, r *http.Request) {
+    http.HandleFunc("/server1", func(w http.ResponseWriter, r *http.Request) {
         //Display the method
         fmt.Fprintln(w, r.Method)
 
@@ -27,7 +27,7 @@ func main() {
         fmt.Fprintf(w, "[%s] [%s] - Status: [%d]", r.Method, path, status)
 
     })
-    http.HandleFunc("/server1", func(w http.ResponseWriter, r *http.Request) {
+    http.HandleFunc("/server2", func(w http.ResponseWriter, r *http.Request) {
 
         //Display the method
         fmt.Fprintln(w, r.Method)
@@ -41,9 +41,9 @@ func main() {
         //Display the status
         fmt.Fprintln(w, http.StatusOK)
 
-        run_blocklist(w, r, "https://httpbin.org/")
+        run_blocklist(w, r, "localhost:8080")
 
-        path, status := status("https://httpbin.org/")
+        path, status := status("localhost:8080")
         fmt.Fprintf(w, "[%s] [%s] - Status: [%d]", r.Method, path, status)
     }) 
 

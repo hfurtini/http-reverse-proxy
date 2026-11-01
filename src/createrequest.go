@@ -1,12 +1,12 @@
 package main
 
-import(
+import (
+	"io"
 	"log"
 	"net/http"
-	"io"
 )
 
-func createRequest(website string) (sb string){
+func createRequest(website string, w http.ResponseWriter) (sb string){
 	resp, err := http.Get(website)
 	if err != nil{
 		log.Fatalln(err)
